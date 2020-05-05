@@ -158,6 +158,8 @@
     [self getScrollX:call result:result];
   } else if ([[call method] isEqualToString:@"getScrollY"]) {
     [self getScrollY:call result:result];
+  } else if ([[call method] isEqualToString:@"getScreenshot"]) {
+    [self onGetScreenshot:call result:result];
   } else {
     result(FlutterMethodNotImplemented);
   }
@@ -311,6 +313,16 @@
 - (void)getScrollY:(FlutterMethodCall*)call result:(FlutterResult)result {
   int offsetY = _webView.scrollView.contentOffset.y;
   result([NSNumber numberWithInt:offsetY]);
+}
+
+- (void)onGetScreenshot:(FlutterMethodCall*)call result:(FlutterResult)result {
+  UIGraphicsBeginImageContextWithOptions(_webView.bounds.size, YES, 0);
+  [_webView drawViewHierarchyInRect:_webView.bounds afterScreenUpdates:YES];
+  UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+  UIGraphicsEndImageContext();
+  NSData *imageData = UIImagePNGRepresentation(image);
+  NSString *encoded = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  result(encoded);
 }
 
 // Returns nil when successful, or an error message when one or more keys are unknown.

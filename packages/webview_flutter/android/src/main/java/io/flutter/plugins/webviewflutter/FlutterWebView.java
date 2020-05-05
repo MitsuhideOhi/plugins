@@ -6,10 +6,13 @@ package io.flutter.plugins.webviewflutter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Handler;
 import android.view.View;
+import android.util.Base64;
 import android.webkit.WebStorage;
 import android.webkit.WebViewClient;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -21,6 +24,7 @@ import io.flutter.plugin.platform.PlatformView;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.io.ByteArrayOutputStream;
 
 public class FlutterWebView implements PlatformView, MethodCallHandler {
   private static final String JS_CHANNEL_NAMES_FIELD = "javascriptChannelNames";
@@ -170,6 +174,9 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
       case "getScrollY":
         getScrollY(result);
         break;
+      case "getScreenshot":
+        getScreenshot(result);
+        break;
       default:
         result.notImplemented();
     }
@@ -291,6 +298,21 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
 
   private void getScrollY(Result result) {
     result.success(webView.getScrollY());
+  }
+
+  private String base64encode(Bitmap bitmap) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);   
+		byte[] b = baos.toByteArray(); 
+		return Base64.encodeToString(b, Base64.NO_WRAP);
+	}
+
+  private void getScreenshot(Result result) {
+    Bitmap bitmap = Bitmap.createBitmap(webView.getWidth(), webView.getHeight(), Bitmap.Config.ARGB_8888);
+    Canvas canvas = new Canvas(bitmap);
+    webView.draw(canvas);
+    String encoded = base64encode(bitmap);
+    result.success(encoded);
   }
 
   private void applySettings(Map<String, Object> settings) {

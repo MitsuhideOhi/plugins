@@ -704,6 +704,11 @@ class WebViewController {
   Future<int> getScrollY() {
     return _webViewPlatformController.getScrollY();
   }
+
+  // Take a screenshot of webView and returns it as a base64 encoded image.
+  Future<String> getScreenshot() {
+    return _webViewPlatformController.getScreenshot();
+  }
 }
 
 /// Manages cookies pertaining to all [WebView]s.

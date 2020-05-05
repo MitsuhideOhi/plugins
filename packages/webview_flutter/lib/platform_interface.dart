@@ -317,6 +317,12 @@ abstract class WebViewPlatformController {
     throw UnimplementedError(
         "WebView getScrollY is not implemented on the current platform");
   }
+
+  /// Take a screenshot of webView and returns it as a base64 encoded image.
+  Future<String> getScreenshot() {
+    throw UnimplementedError(
+        "WebView getScreenshot is not implemented on the current platform");
+  }
 }
 
 /// A single setting for configuring a WebViewPlatform which may be absent.

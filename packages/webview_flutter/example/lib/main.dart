@@ -120,6 +120,7 @@ enum MenuOptions {
   listCache,
   clearCache,
   navigationDelegate,
+  getScreenshot,
 }
 
 class SampleMenu extends StatelessWidget {
@@ -158,6 +159,9 @@ class SampleMenu extends StatelessWidget {
               case MenuOptions.navigationDelegate:
                 _onNavigationDelegateExample(controller.data, context);
                 break;
+              case MenuOptions.getScreenshot:
+                _onGetScreenshot(controller.data, context);
+                break;
             }
           },
           itemBuilder: (BuildContext context) => <PopupMenuItem<MenuOptions>>[
@@ -189,6 +193,10 @@ class SampleMenu extends StatelessWidget {
             const PopupMenuItem<MenuOptions>(
               value: MenuOptions.navigationDelegate,
               child: Text('Navigation Delegate example'),
+            ),
+            const PopupMenuItem<MenuOptions>(
+              value: MenuOptions.getScreenshot,
+              child: Text('Get screenshot'),
             ),
           ],
         );
@@ -271,6 +279,14 @@ class SampleMenu extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: cookieWidgets.toList(),
     );
+  }
+
+  void _onGetScreenshot(
+      WebViewController controller, BuildContext context) async {
+    final screenshot = await controller.getScreenshot();
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text(screenshot),
+    ));
   }
 }
 
