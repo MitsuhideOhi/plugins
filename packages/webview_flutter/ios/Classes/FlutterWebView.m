@@ -321,7 +321,7 @@
   UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();
   NSData *imageData = UIImagePNGRepresentation(image);
-  NSString *encoded = [imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+  NSString *encoded = [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithCarriageReturn];
   result(encoded);
 }
 
