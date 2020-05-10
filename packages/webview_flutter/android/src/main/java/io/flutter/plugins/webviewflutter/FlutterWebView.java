@@ -308,9 +308,9 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
 	}
 
   private void getScreenshot(Result result) {
-    Bitmap bitmap = Bitmap.createBitmap(webView.getWidth(), webView.getHeight(), Bitmap.Config.ARGB_8888);
-    Canvas canvas = new Canvas(bitmap);
-    webView.draw(canvas);
+    webView.setDrawingCacheEnabled(true);
+    Bitmap bitmap = Bitmap.createBitmap(webView.getDrawingCache());
+    webView.setDrawingCacheEnabled(false);
     String encoded = base64encode(bitmap);
     result.success(encoded);
   }
